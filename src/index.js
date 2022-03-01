@@ -3,7 +3,7 @@ const express = require('express');
 const handlebars = require('express-handlebars');
 const morgan = require('morgan');
 const app = express();
-const port = 3001;
+const port = 3010;
 const route = require('./routes');
 const cors = require('cors')
 

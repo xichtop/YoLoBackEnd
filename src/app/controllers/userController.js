@@ -20,7 +20,6 @@ class UserController {
                 .query(query)
 
             resultData = result.recordsets[0]
-
         } catch (err) {
 
         }
@@ -29,16 +28,16 @@ class UserController {
         }
         else {
             user = resultData[0];
-            if(user.Status.trim() === 'Off') {
+            if (user.Status.trim() === 'Off') {
                 res.json({ successful: false, message: 'Tài khoản của bạn đã bị khóa!' });
             }
             else {
                 const accessToken = jwt.sign({ Email: email }, "myyoloshop")
-            res.json({
-                successful: true,
-                message: 'Đăng nhập thành công!',
-                accessToken, user
-            })
+                res.json({
+                    successful: true,
+                    message: 'Đăng nhập thành công!',
+                    accessToken, user
+                })
             }
         }
     }

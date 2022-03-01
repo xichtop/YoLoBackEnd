@@ -2,10 +2,10 @@ var sql = require("mssql");
 var async = require('async');
 var config = require("../config/config");
 
-class ProductVariantsController {
-    // [GET] /ProductVariants
+class QuantitybysizeController {
+    // [GET] /products
     async index(req, res) {
-        var query = `select * from ProductVariants`;
+        var query = `select * from ProductSizes`;
         try {
             let pool = await sql.connect(config)
             let result = await pool.request()
@@ -16,9 +16,9 @@ class ProductVariantsController {
         }
     }
 
-    // [GET] /productvariants/:Productid
+    // [GET] /products/:ProductId
     async getById(req, res) {
-        var query = `select * from ProductVariants where ProductId = '${req.params.ProductId}'`;
+        var query = `select * from ProductSizes where ProductId = '${req.params.ProductId}'`;
         try {
             let pool = await sql.connect(config)
             let result = await pool.request()
@@ -26,52 +26,16 @@ class ProductVariantsController {
             res.json(result.recordsets[0]);
         } catch (err) {
     
-        }
-    }
-
-    async checkColor(req, res) {
-        const { color, productId } = req.body;
-        var result = null;
-        var query = `SELECT * FROM OrderDetails WHERE ProductId = '${productId}' AND Color = '${color}'`;
-        try {
-            let pool = await sql.connect(config)
-            result = await pool.request()
-                .query(query)
-        } catch (err) {
-
-        }
-        if(result.recordsets[0].length === 0) {
-            res.send({ successful: false, message: "Đã xảy ra lỗi!" });
-        } else {
-            res.send({ successful: true, message: "OK!" });
-        }
-    }
-
-    async checkSize(req, res) {
-        const { size, productId } = req.body;
-        var result = null;
-        var query = `SELECT * FROM OrderDetails WHERE ProductId = '${productId}' AND Size = '${size}'`;
-        try {
-            let pool = await sql.connect(config)
-            result = await pool.request()
-                .query(query)
-        } catch (err) {
-
-        }
-        if(result.recordsets[0].length === 0) {
-            res.send({ successful: false, message: "Đã xảy ra lỗi!" });
-        } else {
-            res.send({ successful: true, message: "OK!" });
         }
     }
 
     async update(req, res) {
-        const { ProductId, colors } = req.body;
+        const { ProductId, sizes } = req.body;
         var listQuery = [];
-        var query = `DELETE FROM ProductVariants WHERE ProductId = '${ProductId}'`;
+        var query = `DELETE FROM ProductSizes WHERE ProductId = '${ProductId}'`;
         listQuery.push(query);
-        colors.map(color => {
-            var query = `INSERT INTO ProductVariants (ProductId, Color, URLPicture) Values ('${ProductId}', '${color.English}', '${color.URLPicture}')`;
+        sizes.map(size => {
+            var query = `INSERT INTO ProductSizes (ProductId, Size) Values ('${ProductId}', '${size}')`;
             listQuery.push(query);
         })
         const pool = new sql.ConnectionPool(config)
@@ -105,4 +69,4 @@ class ProductVariantsController {
     }
 }
 
-module.exports = new ProductVariantsController();
+module.exports = new QuantitybysizeController();
